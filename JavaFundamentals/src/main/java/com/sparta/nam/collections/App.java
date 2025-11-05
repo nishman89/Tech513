@@ -64,7 +64,27 @@ public class App {
             }
         }
 
-        for (Map.Entry<Character, Integer> entry: lettersCount.entrySet()) {
+        for (var entry: lettersCount.entrySet()) {
             System.out.println(entry);
     }
+
+        ArrayDeque<String> myNamesStack  = new ArrayDeque<>();
+        myNamesStack.push("Carol");
+        myNamesStack.push("Brenda");
+        myNamesStack.push("Terry");
+
+        System.out.println(myNamesStack.peek());
+        System.out.println(myNamesStack.pop());
+        System.out.println(myNamesStack.peek());
+
+
+        Queue<String> myNamesQueue = new LinkedList<>();
+        myNamesQueue.offer("Carol");
+        myNamesQueue.offer("Brenda");
+        myNamesQueue.offer("Terry");
+
+        System.out.println(myNamesQueue.peek());
+        System.out.println(myNamesQueue.poll());
+        System.out.println(myNamesQueue.peek());
+}
 }
