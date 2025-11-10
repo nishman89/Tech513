@@ -13,7 +13,9 @@ import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.List;
 
@@ -92,7 +94,47 @@ public class SwagLabTests{
         List<WebElement> products = webDriver.findElements(By.className("inventory_item"));
         int productCount = products.size();
         Assertions.assertEquals(productCount, 6);
-        
+
+    }
+
+    @Test
+    @DisplayName("Given I enter a valid username and an invalid password, when I click login, then I should see an error message containing 'Epic sadface'")
+    public void unsuccessfulLoginTest_InvalidPassword(){
+        webDriver.get(BASE_URL);
+        WebElement usernameField= webDriver.findElement(By.name("user-name"));
+        WebElement passwordField= webDriver.findElement(By.name("password"));
+        WebElement loginButton= webDriver.findElement(By.id("login-button"));
+        usernameField.sendKeys("standard_user");
+        passwordField.sendKeys("invalid");
+        loginButton.click();
+        WebElement alert = webDriver.findElement(By.className("error-message-container"));
+        Assertions.assertTrue(alert.getText().contains("Epic sadface"));
+    }
+
+    @Test
+    @DisplayName("Web scraping demo")
+    public void retrieveProductInfo() throws IOException {
+        // Navigate to the sauce labs demo site
+        webDriver.get("https://www.saucedemo.com");
+
+        WebElement usernameField = webDriver.findElement(By.id("user-name"));
+        usernameField.sendKeys("standard_user");
+
+        WebElement passwordField = webDriver.findElement(By.id("password"));
+        passwordField.sendKeys("secret_sauce", Keys.ENTER);
+
+        List<WebElement> products = webDriver.findElements(By.className("inventory_item"));
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("inventoryItems.txt"))) {
+            for (WebElement product: products) {
+                WebElement nameElement = product.findElement(By.className("inventory_item_name"));
+                WebElement priceElement = product.findElement(By.className("inventory_item_price"));
+                String productInfo = nameElement.getText() + ": " + priceElement.getText();
+                writer.println(productInfo);
+                System.out.println(productInfo);
+            }
+        }
+        Assertions.assertEquals(products.size(), 6);
     }
 
 }
