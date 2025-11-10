@@ -1,4 +1,4 @@
-package com.nam.sparta.simpletests;
+package com.sparta.simpletests;
 
 
 import org.junit.jupiter.api.*;
@@ -15,6 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 
 public class SwagLabTests{
     private static final String DRIVER_LOCATION = "src/test/resources/chromedriver.exe";
@@ -25,7 +26,7 @@ public class SwagLabTests{
     public static ChromeOptions getChromeOptions() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
-        options.addArguments("--headless");
+        // options.addArguments("--headless");
         options.addArguments("--remote-allow-origins=*");
 
         return options;
@@ -46,7 +47,10 @@ public class SwagLabTests{
     static void afterAll() {
         service.stop();
     }
-
+    @AfterEach
+    public void afterEach() {
+        webDriver.quit();
+    }
     @Test
     @DisplayName("Check that the webdriver works")
     public void checkWebDriver() {
@@ -55,5 +59,40 @@ public class SwagLabTests{
         Assertions.assertEquals("Swag Labs", webDriver.getTitle());
     }
 
+    @Test
+    @DisplayName("Given I enter a valid username and password, when I click login, then I should land on the inventory page")
+    public void successfulLogin() throws InterruptedException {
+        webDriver.get(BASE_URL);
+
+        WebElement userNameField = webDriver.findElement(By.name("user-name"));
+        WebElement passwordField = webDriver.findElement(By.name("password"));
+        WebElement loginButton = webDriver.findElement(By.id("login-button"));
+
+        userNameField.sendKeys("standard_user");
+        passwordField.sendKeys("secret_sauce");
+        loginButton.click();
+        Thread.sleep(500);
+        Assertions.assertEquals(webDriver.getCurrentUrl(), BASE_URL + "inventory.html");
+
+    }
+
+
+    @Test
+    @DisplayName("Given I am logged in, when I view the inventory page, I should see the correct number of products")
+    public void checkNumberOfProductsOnInventoryPage()  {
+        webDriver.get(BASE_URL);
+
+        WebElement userNameField = webDriver.findElement(By.name("user-name"));
+        WebElement passwordField = webDriver.findElement(By.name("password"));
+        WebElement loginButton = webDriver.findElement(By.id("login-button"));
+
+        userNameField.sendKeys("standard_user");
+        passwordField.sendKeys("secret_sauce", Keys.ENTER);
+
+        List<WebElement> products = webDriver.findElements(By.className("inventory_item"));
+        int productCount = products.size();
+        Assertions.assertEquals(productCount, 6);
+        
+    }
 
 }
