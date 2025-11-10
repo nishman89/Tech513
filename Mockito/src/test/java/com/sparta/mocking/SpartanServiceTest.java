@@ -2,8 +2,6 @@ package com.sparta.mocking;
 
 import com.sparta.mocking.model.Spartan;
 import com.sparta.mocking.repository.Repository;
-import com.sparta.mocking.repository.SpartanListRepository;
-import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -73,5 +71,40 @@ public class SpartanServiceTest {
         Spartan spartan = new Spartan("Nish", "Java", LocalDate.now());
         sut.addSpartan(spartan);
         Mockito.verify(mockRepository).add(spartan);
+    }
+
+    @Test
+    @DisplayName("Given one Spartan created in last 24 hours getSpartansCreatedlast24Hours returns 1")
+    void GivenOneSpartanCreatedInLast24Hours_getSpartansCreatedLast24Hours_Returns1() {
+        List<Spartan> spartans1WithinLast24 = getSpartanListWith1WithinLast24Hours();
+        Mockito.when(mockRepository.getAll())
+                .thenReturn(spartans1WithinLast24);
+        assertThat(sut.getSpartansCreatedLast24Hours().size(), is(1));
+    }
+
+    private List<Spartan> getSpartanListWith1WithinLast24Hours() {
+        var mockSpartan1 = Mockito.mock(Spartan.class);
+        var mockSpartan2 = Mockito.mock(Spartan.class);
+        Mockito.when(mockSpartan1.getStartDate())
+                .thenReturn(LocalDate.now());
+        Mockito.when(mockSpartan2.getStartDate())
+                .thenReturn(LocalDate.now().minusDays(2));
+        return List.of(mockSpartan1, mockSpartan2);
+    }
+
+    @Test
+    @DisplayName("Removing a Spartan that exists returns true")
+    void removingSpartanThatExists_returnsTrue() {
+        Mockito.when(mockRepository.remove(Mockito.anyInt()))
+                .thenReturn(true);
+        Assertions.assertTrue(sut.removeSpartan(1));
+    }
+
+    @Test
+    @DisplayName("Removing a Spartan that doesn't exist returns false")
+    void removingSpartanThatDoesNotExist_returnsFalse() {
+        Mockito.when(mockRepository.remove(Mockito.anyInt()))
+                .thenReturn(false);
+        Assertions.assertFalse(sut.removeSpartan(1));
     }
 }
