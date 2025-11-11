@@ -2,12 +2,10 @@ package com.sparta.simpletests;
 
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -29,6 +27,7 @@ public class SwagLabTests{
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--start-maximized");
         // options.addArguments("--headless");
+        // options.setImplicitWaitTimeout(Duration.ofSeconds(10));
         options.addArguments("--remote-allow-origins=*");
 
         return options;
@@ -82,6 +81,8 @@ public class SwagLabTests{
     @Test
     @DisplayName("Given I am logged in, when I view the inventory page, I should see the correct number of products")
     public void checkNumberOfProductsOnInventoryPage()  {
+
+        Wait<WebDriver> webDriverWait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
         webDriver.get(BASE_URL);
 
         WebElement userNameField = webDriver.findElement(By.name("user-name"));
@@ -93,6 +94,9 @@ public class SwagLabTests{
 
         List<WebElement> products = webDriver.findElements(By.className("inventory_item"));
         int productCount = products.size();
+
+        webDriverWait.until(driver -> driver.getCurrentUrl().contains("/inventory"));
+
         Assertions.assertEquals(productCount, 6);
 
     }
@@ -135,6 +139,56 @@ public class SwagLabTests{
             }
         }
         Assertions.assertEquals(products.size(), 6);
+    }
+
+    @Test
+    @DisplayName("Given I am on the Drag and Drop page, when I drag Box A to Box B, then the boxes have switched positions")
+    public void dragAndDropTests() throws InterruptedException {
+        // Set up ChromeDriver
+
+        // Navigate to the page
+        webDriver.get("https://demoqa.com/droppable/");
+
+        // Find elements for dragging and dropping
+        WebElement columnA = webDriver.findElement(By.id("draggable"));
+        WebElement columnB = webDriver.findElement(By.id("droppable"));
+
+        // Perform drag and drop action
+        Actions action = new Actions(webDriver);
+        action.dragAndDrop(columnA, columnB).perform();
+
+        // Assert that the text of columnB has changed to "Dropped!"
+        Assertions.assertEquals(columnB.getText(), "Dropped!");
+
+    }
+
+    @Test
+    @DisplayName("Alert example")
+    public void alertTest() throws InterruptedException {
+        // Navigate to the alerts page on demoqa.com
+        webDriver.get("https://demoqa.com/alerts");
+
+        // Find the button that triggers the prompt alert and click it
+        WebElement promptButton = webDriver.findElement(By.id("promtButton"));
+        promptButton.click();
+
+        // Switch to the alert
+        Alert alert = webDriver.switchTo().alert();
+
+        // Assert that the alert's text is as expected
+        Assertions.assertEquals(alert.getText(),"Please enter your name");
+
+        // Send the text "Hello" to the alert's input field
+        alert.sendKeys("Hello");
+
+        // Accept the alert to close it
+        alert.accept();
+
+        // Find the element that displays the result of the prompt alert
+        WebElement promptResult = webDriver.findElement(By.id("promptResult"));
+
+        // Assert that the result text contains the string "You entered Hello"
+        Assertions.assertEquals(promptResult.getText(), "You entered Hello");
     }
 
 }
