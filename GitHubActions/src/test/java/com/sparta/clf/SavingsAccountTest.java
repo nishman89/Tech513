@@ -12,7 +12,6 @@ public class SavingsAccountTest {
         SavingsAccount myAccount = new SavingsAccount(1000, 5);
         myAccount.addInterest();
         assertEquals(1050, myAccount.getBalance(), 0.001);
-        assertTrue(false);
     }
 }
 
