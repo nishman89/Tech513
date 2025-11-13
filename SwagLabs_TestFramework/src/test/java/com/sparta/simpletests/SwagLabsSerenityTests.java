@@ -7,8 +7,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.*;
@@ -114,4 +119,27 @@ public class SwagLabsSerenityTests {
         assertThat(webDriver.getCurrentUrl(), is(BASE_URL));
     }
 
-}
+    @Test
+    @DisplayName("Automation Exercise – Accept Cookies If Visible")
+    public void automationExercisePopup() {
+        webDriver.get("https://automationexercise.com/");
+
+        WebElement popupButton =
+                webDriver.findElement(By.cssSelector("button.fc-button.fc-cta-consent.fc-primary-button"));
+
+        if (!popupButton.isDisplayed()) {
+            popupButton.click();
+            System.out.println("Consent popup appeared – clicked Accept.");
+        } else {
+            System.out.println("Consent popup not present – continuing normally.");
+        }
+
+        // Continue your test...
+    }
+
+
+
+    }
+
+
+

@@ -7,6 +7,7 @@ import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -16,6 +17,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.Duration;
 import java.util.List;
+
+import static org.hamcrest.MatcherAssert.*;
+import static org.hamcrest.Matchers.*;
 
 public class SwagLabTests{
     private static final String DRIVER_LOCATION = "src/test/resources/chromedriver.exe";
@@ -190,5 +194,32 @@ public class SwagLabTests{
         // Assert that the result text contains the string "You entered Hello"
         Assertions.assertEquals(promptResult.getText(), "You entered Hello");
     }
+
+    @Test
+    @DisplayName("Automation Exercise – Accept Cookies If Visible")
+    public void automationExercisePopup() throws InterruptedException {
+        webDriver.get("https://automationexercise.com/");
+
+        WebDriverWait wait = new WebDriverWait(webDriver, Duration.ofSeconds(10));
+
+        List<WebElement> consentButtons = webDriver.findElements(By.cssSelector("button.fc-cta-consent"));
+
+        if (!consentButtons.isEmpty() && consentButtons.get(0).isDisplayed()) {
+            consentButtons.get(0).click();
+            System.out.println("Consent popup appeared – clicked Accept.");
+
+            // Optional: wait until popup disappears
+            wait.until(ExpectedConditions.invisibilityOf(consentButtons.get(0)));
+        }
+        WebElement signupLoginLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.linkText("Signup / Login"))
+        );
+        signupLoginLink.click();
+        assertThat(webDriver.getCurrentUrl(), containsString("login"));
+
+    }
+
+
+
 
 }
