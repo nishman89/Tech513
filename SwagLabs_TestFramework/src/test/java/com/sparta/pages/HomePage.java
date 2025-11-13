@@ -1,6 +1,7 @@
 package com.sparta.pages;
 
 
+import com.sparta.utils.Credentials;
 import net.serenitybdd.core.pages.WebElementFacade;
 import net.thucydides.core.annotations.DefaultUrl;
 import net.thucydides.core.pages.PageObject;
@@ -46,5 +47,9 @@ public class HomePage extends PageObject {
         return userNameField.isDisplayed();
     }
 
+    public void enterCredentials(Credentials credentials){
+        enterUserName(credentials.username());
+        enterPassword(credentials.password());
+    }
 
 }

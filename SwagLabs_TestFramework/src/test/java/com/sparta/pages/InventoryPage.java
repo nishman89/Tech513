@@ -16,6 +16,15 @@ public class InventoryPage extends PageObject{
     @FindBy(id = "add-to-cart-sauce-labs-backpack")
     private WebElementFacade addBackpackButton;
 
+    @FindBy(id = "remove-sauce-labs-backpack")
+    private WebElementFacade removeBackpackButton;
+
+    @FindBy(id = "react-burger-menu-btn")
+    private WebElementFacade menuButton;
+
+    @FindBy(id = "logout_sidebar_link")
+    private WebElementFacade logoutLink;
+
     public int getInventoryItemCount() {
         return inventoryItems.size();
     }
@@ -27,4 +36,22 @@ public class InventoryPage extends PageObject{
     public String getCartBadgeText() {
         return cartBadge.getText();
     }
+
+    public void removeFirstItemFromCart() {
+        removeBackpackButton.click();
+    }
+
+    public boolean isCartBadgeDisplayed() {
+        return cartBadge.isPresent() && cartBadge.isVisible();
+    }
+
+    public void openMenu() {
+        menuButton.click();
+    }
+
+    public void clickLogout() {
+        logoutLink.click();
+    }
+
+
 }

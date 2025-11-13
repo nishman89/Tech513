@@ -49,4 +49,42 @@ public class SwagLabsSerenityTest_POM {
         homePage.clickLoginButton();
         Assertions.assertEquals(6, inventoryPage.getInventoryItemCount());
     }
+
+    @Test
+    @DisplayName("Given I have a product in the cart, when I remove it, then the cart count should decrease accordingly")
+    public void removeProductFromCart() {
+        // Given
+        homePage.open();
+        homePage.enterUserName("standard_user");
+        homePage.enterPassword("secret_sauce");
+        homePage.clickLoginButton();
+
+        // Add a product to the cart
+        inventoryPage.addFirstItemToCart();
+
+        // Remove the product from the cart
+        inventoryPage.removeFirstItemFromCart();
+
+        // Then
+        Assertions.assertFalse(inventoryPage.isCartBadgeDisplayed()); // No badge when cart is empty
+    }
+
+
+    @Test
+    @DisplayName("Given I am logged in, when I logout, then I should be redirected to the login page")
+    public void logoutAndVerifyRedirection() {
+        // Given
+        homePage.open();
+        homePage.enterUserName("standard_user");
+        homePage.enterPassword("secret_sauce");
+        homePage.clickLoginButton();
+
+        // When
+        inventoryPage.openMenu();
+        inventoryPage.clickLogout();
+
+        // Then
+        Assertions.assertTrue(homePage.isUserNameFieldDisplayed());
+        Assertions.assertEquals("https://www.saucedemo.com/", inventoryPage.getDriver().getCurrentUrl());
+    }
 }
