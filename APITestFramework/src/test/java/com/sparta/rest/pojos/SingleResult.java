@@ -2,7 +2,7 @@ package com.sparta.rest.pojos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Result{
+public class SingleResult {
 
 	@JsonProperty("country")
 	private String country;
@@ -11,7 +11,7 @@ public class Result{
 	private Codes codes;
 
 	@JsonProperty("ced")
-	private Object ced;
+	private String ced;
 
 	@JsonProperty("parliamentary_constituency_2024")
 	private String parliamentaryConstituency2024;
@@ -23,7 +23,7 @@ public class Result{
 	private Object latitude;
 
 	@JsonProperty("admin_county")
-	private Object adminCounty;
+	private String adminCounty;
 
 	@JsonProperty("msoa")
 	private String msoa;
@@ -93,7 +93,7 @@ public class Result{
 		return codes;
 	}
 
-	public Object getCed(){
+	public String getCed(){
 		return ced;
 	}
 
@@ -109,7 +109,7 @@ public class Result{
 		return latitude;
 	}
 
-	public Object getAdminCounty(){
+	public String getAdminCounty(){
 		return adminCounty;
 	}
 

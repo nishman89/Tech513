@@ -2,19 +2,19 @@ package com.sparta.rest.pojos;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class SinglePostcodeResponse{
+public class BulkResult {
 
 	@JsonProperty("result")
 	private SingleResult result;
 
-	@JsonProperty("status")
-	private int status;
+	@JsonProperty("query")
+	private String query;
 
 	public SingleResult getResult(){
 		return result;
 	}
 
-	public int getStatus(){
-		return status;
+	public String getQuery(){
+		return query;
 	}
 }

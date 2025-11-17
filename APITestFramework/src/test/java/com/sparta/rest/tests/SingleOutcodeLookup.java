@@ -1,4 +1,4 @@
-package com.sparta.rest;
+package com.sparta.rest.tests;
 
 public class SingleOutcodeLookup {
 }

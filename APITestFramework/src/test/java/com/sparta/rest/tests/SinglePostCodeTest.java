@@ -1,4 +1,4 @@
-package com.sparta.rest;
+package com.sparta.rest.tests;
 
 import com.sparta.rest.pojos.SinglePostcodeResponse;
 import com.sparta.utils.Config;
