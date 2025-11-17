@@ -28,3 +28,4 @@ config.properties
 *.iml
 .idea/
 target/
+/APITestFramework/src/test/resources/*.properties
